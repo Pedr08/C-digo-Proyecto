@@ -1,0 +1,42 @@
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd (12,11,5,4,3,2);
+
+float Voltaje_Salida = 0.0;
+float SensorR= 0.0;
+float SensorF = 0.0;
+float Muestra = 0.0;
+float P = 0.0;
+
+void setup() 
+{  
+	lcd.begin(16,2);
+	pinMode (A0,INPUT);
+	Serial.begin(9600);
+
+}
+
+void loop() 
+{
+	Muestra = analogRead(A0);
+	Voltaje_Salida = (Muestra*5)/1023;
+	SensorR = 10000*((5/Voltaje_Salida)-1);
+
+	lcd.setCursor(3,0);
+	lcd.print("Fuerza:");
+	SensorF = pow((SensorR/6690.1),-.8597);
+	lcd.print(SensorF);
+    lcd.setCursor(4,1);
+	lcd.print(" Newtons");
+    delay(2000);
+    lcd.clear();
+	lcd.setCursor(4,0);
+	lcd.print("Peso:");
+	P = SensorF * 101.97;
+	lcd.print(P);
+    lcd.setCursor(4,1);
+	lcd.print(" gramos");
+	delay(2000);
+	lcd.clear();
+
+}
